@@ -4,8 +4,8 @@ class ProdutoModel {
     final String id;
     final String nome;
     final double valor;
-    final AtributoGenerico tipoProduto;
-    final AtributoGenerico categoriaProduto;
+    final TipoOuCategoriaDto tipoProduto;
+    final TipoOuCategoriaDto categoriaProduto;
 
     ProdutoModel({
         this.id,
@@ -19,8 +19,8 @@ class ProdutoModel {
         String id,
         String nome,
         double valor,
-        AtributoGenerico tipoProduto,
-        AtributoGenerico categoriaProduto,
+        TipoOuCategoriaDto tipoProduto,
+        TipoOuCategoriaDto categoriaProduto,
     }) => 
         ProdutoModel(
             id: id ?? this.id,
@@ -38,8 +38,8 @@ class ProdutoModel {
         id: json["id"],
         nome: json["nome"],
         valor: json["valor"].toDouble(),
-        tipoProduto: AtributoGenerico.fromMap(json["tipo_produto"]),
-        categoriaProduto: AtributoGenerico.fromMap(json["categoria_produto"]),
+        tipoProduto: TipoOuCategoriaDto.fromMap(json["tipo_produto"]),
+        categoriaProduto: TipoOuCategoriaDto.fromMap(json["categoria_produto"]),
     );
 
     Map<String, dynamic> toMap() => {
@@ -59,25 +59,25 @@ class ProdutoModel {
     }
 }
 
-class AtributoGenerico {
+class TipoOuCategoriaDto {
     final String descricao;
 
-    AtributoGenerico({
+    TipoOuCategoriaDto({
         this.descricao,
     });
 
-    AtributoGenerico copyWith({
+    TipoOuCategoriaDto copyWith({
         String descricao,
     }) => 
-        AtributoGenerico(
+        TipoOuCategoriaDto(
             descricao: descricao ?? this.descricao,
         );
 
-    factory AtributoGenerico.fromJson(String str) => AtributoGenerico.fromMap(json.decode(str));
+    factory TipoOuCategoriaDto.fromJson(String str) => TipoOuCategoriaDto.fromMap(json.decode(str));
 
     String toJson() => json.encode(toMap());
 
-    factory AtributoGenerico.fromMap(Map<String, dynamic> json) => AtributoGenerico(
+    factory TipoOuCategoriaDto.fromMap(Map<String, dynamic> json) => TipoOuCategoriaDto(
         descricao: json["descricao"],
     );
 

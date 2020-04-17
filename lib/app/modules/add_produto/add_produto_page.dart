@@ -1,8 +1,11 @@
+import 'package:app_hasura/app/modules/add_produto/models/tipo_categoria_produto_dto.dart';
 import 'package:app_hasura/app/shared/custom_combobox/custom_combobox_widget.dart';
 import 'package:app_hasura/app/shared/widgets/label/label_widget.dart';
 import 'package:find_dropdown/find_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 import 'add_produto_controller.dart';
 
 class AddProdutoPage extends StatefulWidget {
@@ -30,6 +33,7 @@ class _AddProdutoPageState
           children: <Widget>[
             LabelWidget(title: "Descrição:"),
             TextField(
+              onChanged: controller.setDescricao,
               decoration: InputDecoration(
                 labelText: "Descrição do Produto",
                 //hintText: "Descrição do Produto",
@@ -54,33 +58,76 @@ class _AddProdutoPageState
               ),
             ),
             LabelWidget(title: "Categoria do Produo:"),
-            CustomComboboxWidget(
-              items: [
-                Model("01", "Teste01"),
-                Model("02", "Teste02"),
-                Model("03", "Teste03"),
-                Model("04", "Teste04"),
-              ],
-              onChange: (item){
-                print(item.descricao);
-              },
-              itemSelecionado: Model("01", "Teste01"),
+            Observer(
+              builder: (BuildContext context){
+
+                if (controller.tipoProduto == null){
+                  return Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      ],
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3),
+                      border: Border.all(
+                        width: 2,
+                        color: Theme.of(context).primaryColor,
+                      )                    
+                    )
+                  );
+                }
+
+                return CustomComboboxWidget(
+                    items: controller.tipoProduto.categoriaProduto.map((data)=>Model(data.id,data.descricao)).toList(),
+                    onChange: (item){
+                      controller.setSelectedCategoria(TipoECategoriaDto(id: item.id, descricao: item.descricao));
+                    },
+                    itemSelecionado: null,
+                  );
+              }
             ),
             LabelWidget(title: "Tipo Produto:"),
-            CustomComboboxWidget(
-              items: [
-                Model("01", "Teste01"),
-                Model("02", "Teste02"),
-                Model("03", "Teste03"),
-                Model("04", "Teste04"),
-              ],
-              onChange: (item){
-                print(item.descricao);
-              },
-              itemSelecionado: Model("01", "Teste01"),
+            Observer(
+              builder: (BuildContext context){
+
+                if (controller.tipoProduto == null){
+                  return Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      ],
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(3),
+                      border: Border.all(
+                        width: 2,
+                        color: Theme.of(context).primaryColor,
+                      )                    
+                    )
+                  );
+                }
+
+                return CustomComboboxWidget(
+                    items: controller.tipoProduto.tipoProduto.map((data)=>Model(data.id,data.descricao)).toList(),
+                    onChange: (item){
+                      controller.setSelectedTipo(TipoECategoriaDto(id: item.id, descricao: item.descricao));
+                    },
+                    itemSelecionado: null,
+                  );
+              }
             ),
             LabelWidget(title: "Valor:"),
             TextField(
+              onChanged: controller.setValor,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: "Valor",
@@ -110,8 +157,26 @@ class _AddProdutoPageState
               padding: EdgeInsets.all(8),
               child: RaisedButton(
                 color: Theme.of(context).primaryColor,
-                onPressed: (){
+                onPressed: () async {
+                  var result = await controller.salvar();
+                  if (result){
+                    Navigator.of(context).pop();
+                  }else{
+                    showDialog(context: context,
+                    child: AlertDialog(
+                      content: Text("Erro ao tentar salvar o produto!"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("Fechar"),
+                          onPressed: (){
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
 
+                    )
+                    );
+                  }
                 },
                 child: Text("Salvar",
                   style: TextStyle(

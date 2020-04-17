@@ -15,13 +15,13 @@ class CustomComboboxWidget extends StatelessWidget {
               items: items,
               //label: "País",
               onChanged: (Model item) => onChange(item),
-              selectedItem: itemSelecionado,
-              validate: (Model item) {
+              selectedItem: itemSelecionado,              
+              /*validate: (Model item) {
                 if (item == null)
                   return "Selecione um valor";                
                 else
                   return null; //return null to "no error"
-              },
+              },*/
               dropdownBuilder: (_, item){
                 return Container(
                   decoration: BoxDecoration(
