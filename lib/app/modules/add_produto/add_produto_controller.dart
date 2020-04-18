@@ -67,15 +67,16 @@ abstract class _AddProdutoControllerBase with Store {
         selectedTipo?.id != null && 
         selectedCategoria?.id != null){ 
           var result = await addProdutoRepository.addProduto(descricao,valor,selectedTipo.id,selectedCategoria.id);
-          /*
-          if (result) {
-            homeController.listaProdutos.add(ProdutoModel(id: "teste"
-              , categoriaProduto: TipoOuCategoriaDto.fromMap({"descricao":selectedCategoria.descricao})
-              ,tipoProduto: TipoOuCategoriaDto.fromMap({"descricao":selectedCategoria.descricao})  
+          
+          if (result != null) {
+            homeController.listaProdutos.add(ProdutoModel(id: result
+              ,nome: descricao
+              ,categoriaProduto: TipoOuCategoriaDto.fromMap({"descricao":selectedCategoria.descricao})
+              ,tipoProduto: TipoOuCategoriaDto.fromMap({"descricao":selectedTipo.descricao})  
               ,valor: double.parse(valor) )
             );
-          }*/
-          return result;
+            return true;
+          }
         }
     return false;
   }
