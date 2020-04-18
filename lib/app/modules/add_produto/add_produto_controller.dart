@@ -8,6 +8,8 @@ import 'package:app_hasura/app/modules/home/repositories/home_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid_util.dart';
 
 import 'models/tipo_categoria_produto_dto.dart';
 
@@ -65,16 +67,27 @@ abstract class _AddProdutoControllerBase with Store {
     if (descricao != null && 
         valor != null && 
         selectedTipo?.id != null && 
-        selectedCategoria?.id != null){ 
-          var result = await addProdutoRepository.addProduto(descricao,valor,selectedTipo.id,selectedCategoria.id);
-          
-          if (result != null) {
-            homeController.listaProdutos.add(ProdutoModel(id: result
+        selectedCategoria?.id != null
+        ){ 
+          var uuid = Uuid();
+          var id = uuid.v1();
+          homeController.listaProdutos.value.add(ProdutoModel(id: id.toString()
               ,nome: descricao
               ,categoriaProduto: TipoOuCategoriaDto.fromMap({"descricao":selectedCategoria.descricao})
               ,tipoProduto: TipoOuCategoriaDto.fromMap({"descricao":selectedTipo.descricao})  
               ,valor: double.parse(valor) )
             );
+          var result = await addProdutoRepository.addProduto(descricao,valor,selectedTipo.id,selectedCategoria.id, id.toString());
+          
+          if (result != null) {
+            /*
+            homeController.listaProdutos.value.add(ProdutoModel(id: result
+              ,nome: descricao
+              ,categoriaProduto: TipoOuCategoriaDto.fromMap({"descricao":selectedCategoria.descricao})
+              ,tipoProduto: TipoOuCategoriaDto.fromMap({"descricao":selectedTipo.descricao})  
+              ,valor: double.parse(valor) )
+            );
+            */
             return true;
           }
         }

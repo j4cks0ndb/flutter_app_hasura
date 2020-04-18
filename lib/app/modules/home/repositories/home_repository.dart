@@ -7,8 +7,8 @@ class HomeRepository extends Disposable {
 
   HomeRepository(this._hasuraConnect);
   
-  Future<List<ProdutoModel>> getProduto() async {
-
+  //Future<List<ProdutoModel>> getProduto() async {
+  Stream<List<ProdutoModel>> getProduto()  {
     var query = """
       query getProdutos {
         produto {
@@ -25,9 +25,27 @@ class HomeRepository extends Disposable {
       }
      """;
 
-    var snapshot = await _hasuraConnect.query(query);
+     var query2 = """
+      subscription getProdutos {
+        produto {
+          id
+          nome
+          valor
+          tipo_produto {
+            descricao
+          }
+          categoria_produto {
+            descricao
+          }    
+        }
+      }
+     """;
 
-    return ProdutoModel.fromJsonList(snapshot["data"]["produto"] as List);
+    //var snapshot = await _hasuraConnect.query(query);
+    var snapshot = _hasuraConnect.subscription(query2);
+
+    //return ProdutoModel.fromJsonList(snapshot["data"]["produto"] as List);
+    return snapshot.map((data)=>ProdutoModel.fromJsonList(data["data"]["produto"]))  ;
 
      
   }

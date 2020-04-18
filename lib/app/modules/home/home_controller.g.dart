@@ -12,14 +12,14 @@ mixin _$HomeController on _HomeControllerBase, Store {
   final _$listaProdutosAtom = Atom(name: '_HomeControllerBase.listaProdutos');
 
   @override
-  List<ProdutoModel> get listaProdutos {
+  ObservableStream<List<ProdutoModel>> get listaProdutos {
     _$listaProdutosAtom.context.enforceReadPolicy(_$listaProdutosAtom);
     _$listaProdutosAtom.reportObserved();
     return super.listaProdutos;
   }
 
   @override
-  set listaProdutos(List<ProdutoModel> value) {
+  set listaProdutos(ObservableStream<List<ProdutoModel>> value) {
     _$listaProdutosAtom.context.conditionallyRunInAction(() {
       super.listaProdutos = value;
       _$listaProdutosAtom.reportChanged();

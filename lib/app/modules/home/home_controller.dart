@@ -6,15 +6,19 @@ part 'home_controller.g.dart';
 
 class HomeController = _HomeControllerBase with _$HomeController;
 
-abstract class _HomeControllerBase with Store { 
+abstract class _HomeControllerBase with Store {
 
   final HomeRepository _repository;
   _HomeControllerBase(this._repository){
-    _repository.getProduto().then((data) => listaProdutos = data);
+
+    //_repository.getProduto().then((data) => listaProdutos = data);
+    listaProdutos = ObservableStream(_repository.getProduto());
   }
 
+  
+  //List<ProdutoModel> listaProdutos = [];
   @observable
-  List<ProdutoModel> listaProdutos = [];
+  ObservableStream<List<ProdutoModel>> listaProdutos;
 
 
 }

@@ -28,10 +28,10 @@ class AddProdutoRepository extends Disposable {
 
   }  
 
-  Future<String> addProduto(String descricao, String valor, String tipo, String categoria) async {
+  Future<String> addProduto(String descricao, String valor, String tipo, String categoria, String id) async {
     var mutation = """
-      mutation addProduto(\$nome: String, \$valor: float8, \$tipo: uuid, \$categoria: uuid) {
-        insert_produto(objects: {nome: \$nome, valor: \$valor, tipo_produto_id: \$tipo, categoria_produto_id: \$categoria}) {
+      mutation addProduto(\$nome: String, \$valor: float8, \$tipo: uuid, \$categoria: uuid, \$id: uuid) {
+        insert_produto(objects: {id: \$id, nome: \$nome, valor: \$valor, tipo_produto_id: \$tipo, categoria_produto_id: \$categoria}) {
           returning {
             id
           }
@@ -41,6 +41,7 @@ class AddProdutoRepository extends Disposable {
     var snapshot;
     try {
       snapshot = await _hasuraConnect.mutation(mutation, variables: {
+      "id":id,
       "nome":descricao,
       "categoria":categoria,
       "tipo":tipo,
@@ -51,9 +52,6 @@ class AddProdutoRepository extends Disposable {
       print(e.toString());
       return null;
     } 
-    
-
-    
 
   }  
 

@@ -17,20 +17,30 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Observer(
         builder: (_){
+          if(controller.listaProdutos.hasError){
+            return Center(child: Text("Erro ao buscar dados"),);
+          }
+
+          if(controller.listaProdutos.value == null){
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return ListView.builder(
-            itemCount: controller.listaProdutos.length,
+            itemCount: controller.listaProdutos.value.length,
             itemBuilder: (BuildContext context, int index){
               return CardProdutoWidget(
-                categoriaProduto: controller.listaProdutos[index].categoriaProduto.descricao,
-                nomeProduto: controller.listaProdutos[index].nome,
-                tipoProduto: controller.listaProdutos[index].tipoProduto.descricao,
-                valor: controller.listaProdutos[index].valor.toString(),
+                categoriaProduto: controller.listaProdutos.value[index].categoriaProduto.descricao,
+                nomeProduto: controller.listaProdutos.value[index].nome,
+                tipoProduto: controller.listaProdutos.value[index].tipoProduto.descricao,
+                valor: controller.listaProdutos.value[index].valor.toString(),
                 );
               }
             );
