@@ -2,6 +2,7 @@ import 'package:app_hasura/app/modules/home/widgets/card_produto/card_produto_wi
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,6 +22,13 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.exit_to_app), onPressed: () async {
+            SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+            sharedPreferences.setString("token", null);
+            Navigator.of(context).pushReplacementNamed('/auth');
+          })
+        ],
       ),
       body: Observer(
         builder: (_){

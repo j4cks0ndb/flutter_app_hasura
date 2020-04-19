@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "908285741804",
+    "firebase_url": "https://app-hasura.firebaseio.com",
+    "project_id": "app-hasura",
+    "storage_bucket": "app-hasura.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908285741804:android:89c5fe848b2ca44f65f3c9",
+        "android_client_info": {
+          "package_name": "com.example.app_hasura"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908285741804-ptq3kfpb814dou8lonemf2eps4vvoub5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsDO1T2bBO9KPt4Bms7xHaOgeiZC9s2i0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908285741804-ptq3kfpb814dou8lonemf2eps4vvoub5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
