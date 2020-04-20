@@ -60,6 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   TextField(
                     onChanged: controller.setEmail,
+                    keyboardType: TextInputType.emailAddress,
                     style: TextStyle(color: Theme.of(context).primaryColor),
                     decoration: InputDecoration(
                       hintText: "meuemail@email.com",
@@ -83,7 +84,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextField(
                     obscureText: true,
                     onChanged: controller.setSenha,
-                    keyboardType: TextInputType.number,
                     style: TextStyle(color: Theme.of(context).primaryColor),
                     decoration: InputDecoration(
                       hintText: "******",
@@ -107,7 +107,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextField(
                     obscureText: true,
                     onChanged: controller.setConfirmacaoSenha,
-                    keyboardType: TextInputType.number,
                     style: TextStyle(color: Theme.of(context).primaryColor),
                     decoration: InputDecoration(
                       hintText: "******",

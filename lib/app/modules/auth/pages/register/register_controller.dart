@@ -18,6 +18,12 @@ abstract class _RegisterControllerBase with Store {
   String senha = "";
 
   @observable
+  String emailError = "";
+
+  @observable
+  String senhaError = "";
+
+  @observable
   String confirmacaoSenha = "";
 
   @action

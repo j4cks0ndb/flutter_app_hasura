@@ -29,9 +29,9 @@ class AddProdutoRepository extends Disposable {
   }  
 
   Future<String> addProduto(String descricao, String valor, String tipo, String categoria, String id) async {
-    var mutation = """
-      mutation addProduto(\$nome: String, \$valor: float8, \$tipo: uuid, \$categoria: uuid, \$id: uuid) {
-        insert_produto(objects: {id: \$id, nome: \$nome, valor: \$valor, tipo_produto_id: \$tipo, categoria_produto_id: \$categoria}) {
+    var mutation = r"""
+      mutation addProduto($nome: String, $valor: float8, $tipo: uuid, $categoria: uuid, $id: uuid) {
+        insert_produto(objects: {id: $id, nome: $nome, valor: $valor, tipo_produto_id: $tipo, categoria_produto_id: $categoria}) {
           returning {
             id
           }

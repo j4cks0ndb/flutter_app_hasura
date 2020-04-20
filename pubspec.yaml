@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  oktoast: ^2.3.2
   shared_preferences: ^0.5.6+3
   firebase_auth: ^0.16.0
   find_dropdown: ^0.1.8

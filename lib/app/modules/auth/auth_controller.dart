@@ -18,6 +18,12 @@ abstract class _AuthControllerBase with Store {
   @observable
   String senha = "";
 
+    @observable
+  String emailError;
+
+  @observable
+  String senhaError;
+
   
 
   @action
@@ -30,13 +36,38 @@ abstract class _AuthControllerBase with Store {
 
   @action
   Future<bool> login() async {
+
+    email = email.trim();
+    senha = senha.trim();
+
+    var valid = true;
+
+    if (email == null || !email.contains("@")){
+      emailError = "Email inválido!";
+      valid = false;
+    }else{
+      email = null;
+    }
+
+    if (senha == null || senha.length == 0){
+      senhaError = "Senha inválido!";
+      valid = false;
+    }else{
+      senha = null;
+    }
+
+    if(!valid){
+      return false;
+    }
+
+
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final FirebaseUser user = (await _auth.signInWithEmailAndPassword(
       email: email,
       password: senha,
     )).user;
     var tokenId = await user.getIdToken();
-    var valid = tokenId != null;
+    valid = tokenId != null;
     if (valid){
       shared.setString("token", tokenId.token);
     }

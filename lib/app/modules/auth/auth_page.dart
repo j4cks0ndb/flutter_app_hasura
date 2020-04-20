@@ -1,6 +1,8 @@
 import 'package:app_hasura/app/shared/widgets/label/label_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:oktoast/oktoast.dart';
 import 'auth_controller.dart';
 
 class AuthPage extends StatefulWidget {
@@ -13,6 +15,23 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends ModularState<AuthPage, AuthController> {
   //use 'controller' variable to access controller
+
+  var focusNodeEmail = FocusNode();
+  var focusNodeSenha = FocusNode();
+
+  _fieldFocusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus){
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  Future _login() async {
+    var result = await controller.login();
+    if (result) {
+      Navigator.of(context).pushReplacementNamed("/home");
+    } else {
+      showToast("Erro ao tentar efetuar o login! Tente novamente!", position: ToastPosition.bottom);                          
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,22 +75,30 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                   LabelWidget(
                     title: "Email:",
                   ),
-                  TextField(
-                    onChanged: controller.setEmail,
-                    style: TextStyle(color: Theme.of(context).primaryColor),
-                    decoration: InputDecoration(
-                      hintText: "meuemail@email.com",
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor, width: 2)),
-                      enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor, width: 2)),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor, width: 2)),
-                    ),
-                  ),
+                  Observer(builder: (_){
+                    return TextField(
+                      onEditingComplete: (){
+                        _fieldFocusChange(context, focusNodeEmail, focusNodeSenha);
+                      },
+                      focusNode: focusNodeEmail,
+                      onChanged: controller.setEmail,
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: "meuemail@email.com",
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor, width: 2)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor, width: 2)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor, width: 2)),
+                        errorText: controller.emailError
+                      ),                      
+                    );
+                  }),
                   SizedBox(
                     height: 20,
                   ),
@@ -79,9 +106,12 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                     title: "Senha:",
                   ),
                   TextField(
+                    onEditingComplete: () async {
+                        _login();
+                      },
+                    focusNode: focusNodeSenha,
                     obscureText: true,
-                    onChanged: controller.setSenha,
-                    keyboardType: TextInputType.number,
+                    onChanged: controller.setSenha,                    
                     style: TextStyle(color: Theme.of(context).primaryColor),
                     decoration: InputDecoration(
                       hintText: "******",
@@ -104,25 +134,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                     child: RaisedButton(
                       color: Theme.of(context).primaryColor,
                       onPressed: () async {
-                        var result = await controller.login();
-                        if (result) {
-                          Navigator.of(context).pushReplacementNamed("/home");
-                        } else {
-                          showDialog(
-                              context: context,
-                              child: AlertDialog(
-                                content: Text(
-                                    "Erro ao tentar efetuar o login! Tente novamente!"),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: Text("Fechar"),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  )
-                                ],
-                              ));
-                        }
+                       _login();
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(10),
@@ -145,7 +157,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                         color: Theme.of(context).primaryColor
                       ),),
                       onPressed: () {
-                        Navigator.of(context).pushNamed("/register");
+                        Navigator.of(context).pushNamed("/auth/register");
                       },
                     ),
                   )
